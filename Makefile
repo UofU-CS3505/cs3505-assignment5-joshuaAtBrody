@@ -1,32 +1,26 @@
-# Set the default value of GOOGLETEST if not provided
-GOOGLETEST ?= /cs3505-assignment5-joshuaAtBrody/googletest
+# Define the directory where googletest is located
+GOOGLETEST ?= ./googletest
 
-# Set the compiler flags
-CXXFLAGS = -std=c++2a -Wall -fsanitize=address -fsanitize=undefined
-LDFLAGS = -L$(GOOGLETEST)/lib
-LIBS = -lgtest -lgtest_main -lpthread
+# Include directories for googletest
+GTEST_INCLUDE_DIR = $(GOOGLETEST)/googletest/include
+GTEST_LIB_DIR = $(GOOGLETEST)/lib
 
-# Targets
-all: trieTest TrieTests test
+# Define compiler and flags
+CXX = g++
+CPPFLAGS = -std=c++17 -Wall -Wextra -I$(GTEST_INCLUDE_DIR) -I.
+LDFLAGS = -L$(GTEST_LIB_DIR) -lgtest_main -lgtest -pthread
 
-trieTest: trie.o trieTest.o
-	g++ $(CXXFLAGS) $(LDFLAGS) trie.o trieTest.o -o $@
+# Target for the test executable
+TrieTests: trieTests.cpp trie.o
+	$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
 
-trie.o: trie.cpp trie.h
-	g++ $(CXXFLAGS) -c $< -o $@
+# Target to run the tests
+test: TrieTests
+	./TrieTests
 
-trieTest.o: trieTest.cpp trie.h
-	g++ $(CXXFLAGS) -c $< -o $@
+# Phony target to ensure test is always run
+.PHONY: test
 
-# Build the test executable
-TrieTests: trie.o trieTest.o
-	g++ $(CXXFLAGS) $(LDFLAGS) trie.o trieTest.o $(LIBS) -o $(BINDIR)/$@
-
-# Run the tests
-test:
-	./$(BINDIR)/TrieTests
-
+# Target to clean the directory
 clean:
-	rm -f trieTest trie.o trieTest.o $(BINDIR)/TrieTests
-
-.PHONY: all clean test TrieTests
+	rm -f *.o TrieTests
