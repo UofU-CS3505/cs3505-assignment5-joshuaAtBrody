@@ -1,20 +1,32 @@
+# Set the default value of GOOGLETEST if not provided
+GOOGLETEST ?= /cs3505-assignment5-joshuaAtBrody/googletest
 
+# Set the compiler flags
+CXXFLAGS = -std=c++2a -Wall -fsanitize=address -fsanitize=undefined
+LDFLAGS = -L$(GOOGLETEST)/lib
+LIBS = -lgtest -lgtest_main -lpthread
 
-all: trieTest
+# Targets
+all: trieTest TrieTests test
 
 trieTest: trie.o trieTest.o
-	g++ -Wall -fsanitize=address -fsanitize=undefined trie.o trieTest.o -o $@
+	g++ $(CXXFLAGS) $(LDFLAGS) trie.o trieTest.o -o $@
 
 trie.o: trie.cpp trie.h
-	g++ -Wall -fsanitize=address -fsanitize=undefined -c $< -o $@
+	g++ $(CXXFLAGS) -c $< -o $@
 
 trieTest.o: trieTest.cpp trie.h
-	g++ -Wall -fsanitize=address -fsanitize=undefined -c $< -o $@
+	g++ $(CXXFLAGS) -c $< -o $@
+
+# Build the test executable
+TrieTests: trie.o trieTest.o
+	g++ $(CXXFLAGS) $(LDFLAGS) trie.o trieTest.o $(LIBS) -o $(BINDIR)/$@
+
+# Run the tests
+test:
+	./$(BINDIR)/TrieTests
 
 clean:
-	rm -f trieTest trie.o trieTest.o
+	rm -f trieTest trie.o trieTest.o $(BINDIR)/TrieTests
 
-test: trieTest
-	trieTest words.txt queries.txt
-
-.PHONY: all clean test
+.PHONY: all clean test TrieTests
