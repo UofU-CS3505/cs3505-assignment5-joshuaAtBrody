@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 
 
 /// @brief A class for storing words by connection their letters with Nodes using a trie. 
@@ -17,26 +18,24 @@ class Trie{
 
     /// @brief A private Node struct to act as the tree/trie and checks if the current node is the end of some word.
     struct Node {
-        Node* branches[26];
+        std::map<char, Node> branches;
         bool isEndOfWord;
 
         Node() : isEndOfWord(false) {
-            for (int i = 0; i < 26; ++i) {
-                branches[i] = nullptr;
-            }
+            // for (auto it = branches.begin(); it != branches.end(); ++it) {
+            //     it->second = nullptr;
+            // }
         }
 
-        ~Node() { // Destructor for Node class
-            for (int i = 0; i < 26; ++i) {
-                if (branches[i] != nullptr) {
-                    delete branches[i]; // Recursively delete child nodes
-                }
-            }
-        }
+        ~Node() = default; // Destructor for Node class
+            // for (auto it = branches.begin(); it != branches.end(); ++it) {
+            //     delete it->second; // Recursively delete child nodes
+            // }
+        
     };
 
     /// @brief the first letter of any given word
-    Node* root;
+    Node root;
 
     void copyNodes(Node* src, Node* dest);
 
