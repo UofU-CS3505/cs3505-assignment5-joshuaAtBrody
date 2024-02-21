@@ -1,30 +1,22 @@
 /* 
-    By Joshua Brody u1351827
-    CS3810 Assignment 4
+    By Joshua Brody u1351827, Jacob Xu u1448572
+    CS3505 Assignment 5, 2/15/2024
 */
 
 #include <iostream>
 #include "trie.h"
 
-// Default constructor
-
 /// @brief Default Constructor, makes an empty root node.
 Trie::Trie() = default;
 
-// Destructor
-
 /// @brief uses the clearTrie method to delete the dynamic trie.
 Trie::~Trie() = default;
-
-// Copy constructor
 
 /// @brief Copy Constructor that makes a copy of the other without changing other.
 /// @param other trie to be copied from
 Trie::Trie(const Trie& other) {
     root = other.root;
 }
-
-// Assignment operator
 
 /// @brief Assignment Operator that copies other and then deletes other.
 /// @param copyThisTrie trie to be copied from and deleted
@@ -33,7 +25,9 @@ Trie& Trie::operator=(Trie copyThisTrie) {
     std::swap(root, copyThisTrie.root);
     return *this;
 }
-
+/// @brief helper method that be able to copy node
+/// @param copyFromSource copy from the source
+/// @param copyToDestination copy to destination
 void Trie::copyNodes(Node* copyFromSource, Node* copyToDestination) {
     if (copyFromSource == nullptr || copyToDestination == nullptr) {
         return;
@@ -45,9 +39,6 @@ void Trie::copyNodes(Node* copyFromSource, Node* copyToDestination) {
     }
     copyToDestination->isEndOfWord = copyFromSource->isEndOfWord;
 }
-
-
-// Method to add a word to the trie
 
 /// @brief Method to a word to the trie
 /// @param word a lowercase string to be added
@@ -62,8 +53,6 @@ void Trie::addWord(const std::string& word) {
     current->isEndOfWord = true;
 }
 
-// Method to check if a word is in the trie
-
 /// @brief Check if a word is in the trie
 /// @param word the lowercase string to be found in the trie
 /// @return false is word is not found, true otherwise
@@ -77,8 +66,6 @@ bool Trie::isWord(const std::string& word) {
     }
     return current->isEndOfWord;
 }
-
-// Method to get all words starting with a given prefix
 
 /// @brief will return a group of words that begin with the given prefix
 /// @param prefix a lowercase string to be compared in the trie
@@ -102,9 +89,6 @@ std::vector<std::string> Trie::allWordsStartingWithPrefix(const std::string& pre
 
     return result;
 }
-
-
-// Recursive helper function for DFS to get all words
 
 /// @brief Helper method to recursively search whether the current word branches to the next correct letter of the prefix
 /// @param node the letter node given from the previous function the contains the next letter in the prefix to search for

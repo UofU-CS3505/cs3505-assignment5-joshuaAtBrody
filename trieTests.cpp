@@ -1,5 +1,5 @@
 /*
-Authors: Joshua Brody, Jacob
+Authors: Joshua Brody, Jacob Xu
 CS3505 Assignment 5, 2/15/2024
 */
 #include <cassert>

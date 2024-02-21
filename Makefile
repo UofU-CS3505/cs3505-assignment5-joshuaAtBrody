@@ -1,3 +1,5 @@
+#Authors: Joshua Brody, Jacob Xu
+#CS3505 Assignment 5, 2/15/2024
 # Define the directory where googletest is located
 GOOGLETEST ?= ./googletest
 
