@@ -27,23 +27,23 @@ Trie::Trie(const Trie& other) {
 // Assignment operator
 
 /// @brief Assignment Operator that copies other and then deletes other.
-/// @param other trie to be copied from and deleted
+/// @param copyThisTrie trie to be copied from and deleted
 /// @return A copy of other
-Trie& Trie::operator=(Trie other) {
-    std::swap(root, other.root);
+Trie& Trie::operator=(Trie copyThisTrie) {
+    std::swap(root, copyThisTrie.root);
     return *this;
 }
 
-void Trie::copyNodes(Node* src, Node* dest) {
-    if (src == nullptr || dest == nullptr) {
+void Trie::copyNodes(Node* copyFromSource, Node* copyToDestination) {
+    if (copyFromSource == nullptr || copyToDestination == nullptr) {
         return;
     }
 
-    for (auto& [key, val] : src->branches) {
-        dest->branches[key] = val;
-        copyNodes(&(src->branches[key]), &(dest->branches[key]));
+    for (auto& [key, val] : copyFromSource->branches) {
+        copyToDestination->branches[key] = val;
+        copyNodes(&(copyFromSource->branches[key]), &(copyToDestination->branches[key]));
     }
-    dest->isEndOfWord = src->isEndOfWord;
+    copyToDestination->isEndOfWord = copyFromSource->isEndOfWord;
 }
 
 

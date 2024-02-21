@@ -21,16 +21,9 @@ class Trie{
         std::map<char, Node> branches;
         bool isEndOfWord;
 
-        Node() : isEndOfWord(false) {
-            // for (auto it = branches.begin(); it != branches.end(); ++it) {
-            //     it->second = nullptr;
-            // }
-        }
+        Node() : isEndOfWord(false) {}
 
         ~Node() = default; // Destructor for Node class
-            // for (auto it = branches.begin(); it != branches.end(); ++it) {
-            //     delete it->second; // Recursively delete child nodes
-            // }
         
     };
 
