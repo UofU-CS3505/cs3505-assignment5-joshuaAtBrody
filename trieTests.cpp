@@ -19,11 +19,37 @@ TEST(TrieTest, BasicFunctionality) {
     EXPECT_FALSE(trie.isWord("foo"));
 }
 
-// Test case to verify behavior with empty trie
+// Test case to verify behavior of empty trie
 TEST(TrieTest, EmptyTrie) {
     Trie trie;
-    // Check if empty trie correctly handles word check
+    // Verify that empty trie does not contain any words
     EXPECT_FALSE(trie.isWord("hello"));
+}
+
+// Test case to verify add same words
+TEST(TrieTest, CheckDuplicate) {
+    Trie trie;
+    // Add words to the trie
+    trie.addWord("hello");
+    trie.addWord("hello");
+    std::vector<std::string> wordsWithPrefix = trie.allWordsStartingWithPrefix("hello");
+
+    // Check duplicate word
+    EXPECT_EQ(1, wordsWithPrefix.size());
+}
+
+// Test case to verify behavior of prefix search with non-existent prefixes
+TEST(TrieTest, NonExistentPrefix) {
+    Trie trie;
+    // Add words to the trie
+    trie.addWord("hello");
+    trie.addWord("world");
+
+    // Check prefix search with a non-existent prefix
+    std::vector<std::string> wordsWithPrefix = trie.allWordsStartingWithPrefix("foo");
+
+    // Check if no words are returned for a non-existent prefix
+    EXPECT_TRUE(wordsWithPrefix.empty());
 }
 
 // Test case to verify behavior with words starting with a common prefix
@@ -38,21 +64,6 @@ TEST(TrieTest, WordsWithCommonPrefix) {
     EXPECT_TRUE(trie.isWord("apple"));
     EXPECT_TRUE(trie.isWord("app"));
     EXPECT_TRUE(trie.isWord("application"));
-}
-
-// Test case to verify behavior with assignment operator
-TEST(TrieTest, WordsWithNumbers) {
-    Trie trie;
-    
-    // Add words with common prefix to the trie
-    trie.addWord("apple");
-    trie.addWord("app");
-    trie.addWord("application");
-
-    Trie trie2;
-    trie2 = trie;
-    // Check words with number
-    EXPECT_TRUE(trie2.isWord("apple"));
 }
 
 // Test case to verify behavior of allWordsStartingWithPrefix method
@@ -74,14 +85,14 @@ TEST(TrieTest, AllWordsStartingWithPrefix) {
     std::cout << std::endl;
 
     // Check if the correct words are returned
-    EXPECT_EQ(wordsWithPrefix.size(), 3);
+    EXPECT_EQ(3, wordsWithPrefix.size());
     EXPECT_TRUE(std::find(wordsWithPrefix.begin(), wordsWithPrefix.end(), "app") != wordsWithPrefix.end());
     EXPECT_TRUE(std::find(wordsWithPrefix.begin(), wordsWithPrefix.end(), "application") != wordsWithPrefix.end());
 }
 
 
-// Test case to verify copy constructor and assignment operator behavior
-TEST(TrieTest, CopyConstructorAndAssignment) {
+// Test case to verify copy constructor behavior
+TEST(TrieTest, CopyConstructor) {
     Trie trie;
     // Add words to the original trie
     trie.addWord("hello");
@@ -99,23 +110,35 @@ TEST(TrieTest, CopyConstructorAndAssignment) {
 
     // Check if modification in original trie affects copied trie
     EXPECT_FALSE(copiedTrie.isWord("foo"));
-
-    // Create another trie and assign the original trie to it
-    Trie assignedTrie;
-    assignedTrie = trie;
-
-    // Check if the assigned trie contains the same words
-    EXPECT_TRUE(assignedTrie.isWord("hello"));
-    EXPECT_TRUE(assignedTrie.isWord("world"));
-    EXPECT_TRUE(assignedTrie.isWord("foo"));
 }
-//simply test
-TEST(trieTest, basicTest){
+
+// Test case to verify copy assignment operator behavior
+TEST(TrieTest, CopyAssignment) {
     Trie trie;
-    Trie testTrie;
-    testTrie.addWord("joshua");
     
-    EXPECT_TRUE(testTrie.isWord("joshua")) << "failed testTrie.isWord('joshua')";
+    // Add words with common prefix to the trie
+    trie.addWord("apple");
+    trie.addWord("app");
+    trie.addWord("application");
+
+    Trie trie2;
+    trie2 = trie;
+    // Check words with number
+    EXPECT_TRUE(trie2.isWord("apple"));
+    EXPECT_TRUE(trie2.isWord("app"));
+    EXPECT_TRUE(trie2.isWord("application"));
+}
+
+// Test case to verify trie copying and assignment with empty trie
+TEST(TrieTest, CopyAssignmentEmptyTrie) {
+    Trie trie1;
+    Trie trie2;
+
+    // Copy assignment from an empty trie
+    trie2 = trie1;
+
+    // Verify that the copied trie is empty
+    EXPECT_FALSE(trie2.isWord("hello"));
 }
 
 // Main function to run all the tests

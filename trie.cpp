@@ -7,10 +7,10 @@
 #include "trie.h"
 
 /// @brief Default Constructor, makes an empty root node.
-Trie::Trie() = default;
+Trie::Trie() {};
 
 /// @brief uses the clearTrie method to delete the dynamic trie.
-Trie::~Trie() = default;
+Trie::~Trie() {};
 
 /// @brief Copy Constructor that makes a copy of the other without changing other.
 /// @param other trie to be copied from
@@ -25,46 +25,40 @@ Trie& Trie::operator=(Trie copyThisTrie) {
     std::swap(root, copyThisTrie.root);
     return *this;
 }
-/// @brief helper method that be able to copy node
-/// @param copyFromSource copy from the source
-/// @param copyToDestination copy to destination
-void Trie::copyNodes(Node* copyFromSource, Node* copyToDestination) {
-    if (copyFromSource == nullptr || copyToDestination == nullptr) {
-        return;
-    }
-
-    for (auto& [key, val] : copyFromSource->branches) {
-        copyToDestination->branches[key] = val;
-        copyNodes(&(copyFromSource->branches[key]), &(copyToDestination->branches[key]));
-    }
-    copyToDestination->isEndOfWord = copyFromSource->isEndOfWord;
-}
 
 /// @brief Method to a word to the trie
 /// @param word a lowercase string to be added
 void Trie::addWord(const std::string& word) {
-    Node* current = &root;
-    for (char ch : word) {
-        if (current->branches.find(ch) == current->branches.end()) {
-            current->branches[ch] = Node();
+    Node* currentBranch = &root;
+    for (char currentCharInWord : word) {
+        if (isCharAbsentInBranchHelper(currentBranch, currentCharInWord)) {
+            currentBranch->branches[currentCharInWord] = Node();
         }
-        current = &(current->branches[ch]);
+        currentBranch = &(currentBranch->branches[currentCharInWord]);
     }
-    current->isEndOfWord = true;
+    currentBranch->isEndOfWord = true;
 }
 
 /// @brief Check if a word is in the trie
 /// @param word the lowercase string to be found in the trie
 /// @return false is word is not found, true otherwise
 bool Trie::isWord(const std::string& word) {
-    Node* current = &root;
-    for (char ch : word) {
-        if (current->branches.find(ch) == current->branches.end()) {
+    Node* currentBranch = &root;
+    for (char currentCharInWord : word) {
+        if (isCharAbsentInBranchHelper(currentBranch, currentCharInWord)) {
             return false;
         }
-        current = &(current->branches[ch]);
+        currentBranch = &(currentBranch->branches[currentCharInWord]);
     }
-    return current->isEndOfWord;
+    return currentBranch->isEndOfWord;
+}
+
+/// @brief helper method for implifying readability from the boolean logic.
+/// @param currentNode the current branch we have iterated through
+/// @param currentCharInWord the character in the word we are comparing with the branch
+/// @return whether that word was found in the trie.
+bool Trie::isCharAbsentInBranchHelper(Node* currentNode, char currentCharInWord){
+    return currentNode->branches.find(currentCharInWord) == currentNode->branches.end();
 }
 
 /// @brief will return a group of words that begin with the given prefix
@@ -72,20 +66,20 @@ bool Trie::isWord(const std::string& word) {
 /// @return a vector string that contains all the words that start with the given prefix
 std::vector<std::string> Trie::allWordsStartingWithPrefix(const std::string& prefix) {
     std::vector<std::string> result;
-    Node* current = &root;
+    Node* currentBranch = &root;
 
     // Traverse the trie until the end of the prefix
-    for (char ch : prefix) {
-        if (current->branches.find(ch) == current->branches.end()) {
+    for (char currentCharInPrefix : prefix) {
+        if (isCharAbsentInBranchHelper(currentBranch, currentCharInPrefix)) {
             return result; // Prefix not found
         }
-        current = &(current->branches[ch]);
+        currentBranch = &(currentBranch->branches[currentCharInPrefix]);
     }
 
     // Perform DFS to get all words starting with the prefix
     // using a recursive helper function
     std::string currentWord = prefix;
-    allWordsStartingWithPrefixHelper(current, currentWord, result);
+    allWordsStartingWithPrefixHelper(currentBranch, currentWord, result);
 
     return result;
 }
@@ -94,22 +88,14 @@ std::vector<std::string> Trie::allWordsStartingWithPrefix(const std::string& pre
 /// @param node the letter node given from the previous function the contains the next letter in the prefix to search for
 /// @param currentWord the current branch we are searching for the letter
 /// @param result a lowercase string with the correct word that begins with the prefix
-void Trie::allWordsStartingWithPrefixHelper(Node* node, std::string& currentWord, std::vector<std::string>& result) {
-    if (node->isEndOfWord) {
+void Trie::allWordsStartingWithPrefixHelper(Node* currentBranchNode, std::string& currentWord, std::vector<std::string>& result) {
+    if (currentBranchNode->isEndOfWord) {
         result.push_back(currentWord);
     }
 
-    for (auto& [key, val] : node->branches) {
+    for (auto& [key, val] : currentBranchNode->branches) {
         currentWord.push_back(key);
-        allWordsStartingWithPrefixHelper(&(node->branches[key]), currentWord, result);
+        allWordsStartingWithPrefixHelper(&(currentBranchNode->branches[key]), currentWord, result);
         currentWord.pop_back();
     }
 }
-
-
-
-
-
-
-
-
