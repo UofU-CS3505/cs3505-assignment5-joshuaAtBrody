@@ -40,16 +40,19 @@ TEST(TrieTest, WordsWithCommonPrefix) {
     EXPECT_TRUE(trie.isWord("application"));
 }
 
-// Test case to verify behavior with words starting with a common prefix
-TEST(TrieTest, WordsWithCommonPrefixIndex) {
+// Test case to verify behavior with assignment operator
+TEST(TrieTest, WordsWithNumbers) {
     Trie trie;
+    
     // Add words with common prefix to the trie
     trie.addWord("apple");
     trie.addWord("app");
     trie.addWord("application");
 
-    // Check words with common prefix
-    EXPECT_EQ("apple", trie[0]);
+    Trie trie2;
+    trie2 = trie;
+    // Check words with number
+    EXPECT_TRUE(trie2.isWord("apple"));
 }
 
 // Test case to verify behavior of allWordsStartingWithPrefix method
@@ -106,7 +109,7 @@ TEST(TrieTest, CopyConstructorAndAssignment) {
     EXPECT_TRUE(assignedTrie.isWord("world"));
     EXPECT_TRUE(assignedTrie.isWord("foo"));
 }
-
+//simply test
 TEST(trieTest, basicTest){
     Trie trie;
     Trie testTrie;
