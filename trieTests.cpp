@@ -40,6 +40,18 @@ TEST(TrieTest, WordsWithCommonPrefix) {
     EXPECT_TRUE(trie.isWord("application"));
 }
 
+// Test case to verify behavior with words starting with a common prefix
+TEST(TrieTest, WordsWithCommonPrefixIndex) {
+    Trie trie;
+    // Add words with common prefix to the trie
+    trie.addWord("apple");
+    trie.addWord("app");
+    trie.addWord("application");
+
+    // Check words with common prefix
+    EXPECT_EQ("apple", trie[0]);
+}
+
 // Test case to verify behavior of allWordsStartingWithPrefix method
 TEST(TrieTest, AllWordsStartingWithPrefix) {
     Trie trie;
